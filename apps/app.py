@@ -5,7 +5,18 @@ from flask import session
 from flask import flash
 from flask import redirect
 from flask import url_for
+from functools import wraps
 # from flask import g
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "user" not in session:
+            flash("You Must to Log First")
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 def create_app():
@@ -28,15 +39,29 @@ def create_app():
 
     @app.errorhandler(404)
     def page_not_found(e):
-        return "Page Not Found", 404
+        flash("Page Not Found")
+        return redirect(url_for("signup"))
 
 
     @app.route("/")
+    @login_required
     def index():
         return "Wellcome User"
 
 
+    @app.route("/logout")
+    def logout():
+        if "user" in session:
+            session.pop("user", None)
+            flash("You are Logged Out")
+            return redirect(url_for("login"))
+
+        flash("You alredy are Logged out")
+        return redirect(url_for("login"))
+
+
     @app.route("/profile")
+    @login_required
     def profile():
         return render_template("profile.html", user=session.get("user", None))
 
@@ -81,7 +106,6 @@ def create_app():
                 return redirect(url_for("login"))
 
         else:
-            flash("Please Log in")
             return render_template("login.html")
 
 
