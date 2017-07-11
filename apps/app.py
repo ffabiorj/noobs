@@ -87,7 +87,6 @@ def create_app():
     def login():
         if request.method == "POST":
             username = request.form["username"]
-            email = request.form["email"]
             password = request.form["password"]
 
             user = User.query.filter_by(username=username).first()
