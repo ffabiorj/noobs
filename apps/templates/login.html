@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %} Login | {{ super() }} {% endblock %}
+
+
+{% block content %}
+
+    <form class="form-group" action="{{ url_for("login") }}" method="POST">
+        <div class="row">
+            <div class="col-5">
+                <h3>Login</h3>
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" class="form-control" placeholder="Your Username" required="">
+
+                <label for="email">Email</label>
+                <input type="text" name="email" id="email" class="form-control" placeholder="Your Email" required="">
+
+                <label for="password">Password</label>
+                <input type="text" name="password" id="password" class="form-control" placeholder="Your Password" required="">
+                <br>
+                <br>
+                <button type="submit" name="btn_signup" class=" btn btn-info">Login</button>
+            </div>
+
+            </div>
+    </form>
+
+{% endblock %}
